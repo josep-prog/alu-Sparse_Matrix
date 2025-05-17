@@ -1,68 +1,28 @@
+// index.js
 const readline = require('readline');
-const { add, subtract, multiply } = require('./operations');
 const { parseMatrixFile, writeMatrixToFile } = require('./file-io');
+const { add, subtract, multiply } = require('./operations');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-function showMenu() {
-  console.log('\nSparse Matrix Calculator');
-  console.log('1. Add matrices');
-  console.log('2. Subtract matrices');
-  console.log('3. Multiply matrices');
-  console.log('4. Exit');
-}
+const prompt = (q) => new Promise(resolve => rl.question(q, resolve));
 
-function getInput(prompt) {
-  return new Promise(resolve => {
-    rl.question(prompt, answer => {
-      resolve(answer.trim());
-    });
-  });
-}
+(async () => {
+  try {
+    const op = (await prompt("Choose operation (add/subtract/multiply): ")).trim();
+    const f1 = await prompt("Enter path for first matrix: ");
+    const f2 = await prompt("Enter path for second matrix: ");
+    const out = await prompt("Enter output file path: ");
 
-async function main() {
-  let running = true;
-  
-  while (running) {
-    showMenu();
-    const choice = await getInput('Select an operation (1-4): ');
-    
-    try {
-      switch (choice) {
-        case '1':
-        case '2':
-        case '3':
-          const file1 = await getInput('Enter first matrix file path: ');
-          const file2 = await getInput('Enter second matrix file path: ');
-          const outputFile = await getInput('Enter output file path: ');
-          
-          const matrixA = parseMatrixFile(file1);
-          const matrixB = parseMatrixFile(file2);
-          let result;
-          
-          if (choice === '1') result = add(matrixA, matrixB);
-          else if (choice === '2') result = subtract(matrixA, matrixB);
-          else result = multiply(matrixA, matrixB);
-          
-          writeMatrixToFile(result, outputFile);
-          console.log('Operation completed successfully!');
-          break;
-        case '4':
-          running = false;
-          break;
-        default:
-          console.log('Invalid choice. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+    const a = parseMatrixFile(f1.trim());
+    const b = parseMatrixFile(f2.trim());
+
+    const result = ({ add, subtract, multiply }[op])(a, b);
+    writeMatrixToFile(result, out.trim());
+    console.log("Operation complete.");
+  } catch (e) {
+    console.error("Error:", e.message);
+  } finally {
+    rl.close();
   }
-  
-  rl.close();
-  console.log('Goodbye!');
-}
-
-main().catch(console.error);
+})();
