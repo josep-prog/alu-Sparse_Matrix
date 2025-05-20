@@ -1,27 +1,35 @@
 // sparse-matrix.js
 class SparseMatrix {
   constructor(rows, cols) {
-    this.rows = rows;
-    this.cols = cols;
-    this.data = {}; // key = 'row,col'
+    this.rows = rows; // Number of rows
+    this.cols = cols; // Number of columns
+    this.data = {};   // Stores non-zero values as 'row,col': value
   }
 
-  get(r, c) {
-    return this.data[`${r},${c}`] || 0;
+  // Get value at row, col (0 if not set)
+  get(row, col) {
+    const key = `${row},${col}`;
+    return this.data[key] || 0;
   }
 
-  set(r, c, val) {
-    if (val !== 0) {
-      this.data[`${r},${c}`] = val;
+  // Set value at row, col (only stores if not zero)
+  set(row, col, value) {
+    const key = `${row},${col}`;
+    if (value !== 0) {
+      this.data[key] = value;
     } else {
-      delete this.data[`${r},${c}`]; // Keep it truly sparse
+      delete this.data[key]; // Remove zero values
     }
   }
 
+  // Create matrix from list of [row,col,value] entries
   static fromEntries(rows, cols, entries) {
-    const mat = new SparseMatrix(rows, cols);
-    for (const [r, c, val] of entries) mat.set(r, c, val);
-    return mat;
+    const matrix = new SparseMatrix(rows, cols);
+    for (const [row, col, value] of entries) {
+      matrix.set(row, col, value);
+    }
+    return matrix;
   }
 }
+
 module.exports = SparseMatrix;
