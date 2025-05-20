@@ -3,7 +3,7 @@ const readline = require('readline');
 const { parseMatrixFile, writeMatrixToFile } = require('./matrix-storage.js');
 const { add, subtract, multiply } = require('./operations');
 
-// Setup user input
+// User input
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
