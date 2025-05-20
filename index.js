@@ -8,7 +8,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-// Helper function to ask questions
+// Function to ask questions
 function ask(question) {
   return new Promise(resolve => {
     rl.question(question, answer => resolve(answer.trim()));
@@ -17,7 +17,7 @@ function ask(question) {
 
 async function main() {
   try {
-    // Get user input
+    // User input
     const operation = await ask("What operation? (add/subtract/multiply): ");
     const file1 = await ask("First matrix file path: ");
     const file2 = await ask("Second matrix file path: ");
