@@ -1,4 +1,3 @@
-// file-io.js
 const fs = require('fs');
 const SparseMatrix = require('./sparse-matrix');
 
