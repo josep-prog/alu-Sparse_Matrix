@@ -1,28 +1,54 @@
 // index.js
 const readline = require('readline');
-const { parseMatrixFile, writeMatrixToFile } = require('./file-io');
+const { parseMatrixFile, writeMatrixToFile } = require('./matrix-storage.js');
 const { add, subtract, multiply } = require('./operations');
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+// Setup user input
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-const prompt = (q) => new Promise(resolve => rl.question(q, resolve));
+// Helper function to ask questions
+function ask(question) {
+  return new Promise(resolve => {
+    rl.question(question, answer => resolve(answer.trim()));
+  });
+}
 
-(async () => {
+async function main() {
   try {
-    const op = (await prompt("Choose operation (add/subtract/multiply): ")).trim();
-    const f1 = await prompt("Enter path for first matrix: ");
-    const f2 = await prompt("Enter path for second matrix: ");
-    const out = await prompt("Enter output file path: ");
+    // Get user input
+    const operation = await ask("What operation? (add/subtract/multiply): ");
+    const file1 = await ask("First matrix file path: ");
+    const file2 = await ask("Second matrix file path: ");
+    const outputFile = await ask("Where to save result? ");
 
-    const a = parseMatrixFile(f1.trim());
-    const b = parseMatrixFile(f2.trim());
+    // Load matrices
+    const matrix1 = parseMatrixFile(file1);
+    const matrix2 = parseMatrixFile(file2);
 
-    const result = ({ add, subtract, multiply }[op])(a, b);
-    writeMatrixToFile(result, out.trim());
-    console.log("Operation complete.");
-  } catch (e) {
-    console.error("Error:", e.message);
+    // Do the operation
+    let result;
+    if (operation === 'add') {
+      result = add(matrix1, matrix2);
+    } else if (operation === 'subtract') {
+      result = subtract(matrix1, matrix2);
+    } else if (operation === 'multiply') {
+      result = multiply(matrix1, matrix2);
+    } else {
+      throw new Error("Unknown operation");
+    }
+
+    // Save result
+    writeMatrixToFile(result, outputFile);
+    console.log("Done! Result saved to", outputFile);
+    
+  } catch (error) {
+    console.error("Oops! Error:", error.message);
   } finally {
     rl.close();
   }
-})();
+}
+
+main();
