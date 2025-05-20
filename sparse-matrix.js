@@ -1,4 +1,3 @@
-// sparse-matrix.js
 class SparseMatrix {
   constructor(rows, cols) {
     this.rows = rows; // Number of rows
