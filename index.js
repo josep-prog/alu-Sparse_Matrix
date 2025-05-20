@@ -1,4 +1,3 @@
-// index.js
 const readline = require('readline');
 const { parseMatrixFile, writeMatrixToFile } = require('./matrix-storage.js');
 const { add, subtract, multiply } = require('./operations');
