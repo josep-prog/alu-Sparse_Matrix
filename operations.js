@@ -1,4 +1,3 @@
-// operations.js
 const SparseMatrix = require('./sparse-matrix');
 
 // Check if matrices can work together
