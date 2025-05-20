@@ -15,7 +15,7 @@ Vector A :
         | 0 | 2 | 0 | 5 | 0 | 0  | 3   
         | 0 | 0 | 0 | 0 | 0 | 0  | 4  
         | 4 | 0 | 0 | 0 | 0 | 0  | 5  
-          1     2      3     4     5     6      
+          1     2      3     4     5      6      
    
 
 *  those numbers out of the box vector , represent index of column and row  
